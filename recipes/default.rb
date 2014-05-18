@@ -17,13 +17,9 @@
 # limitations under the License.
 #
 
-include_recipe "php"
-
 # On Windows PHP comes with the MySQL Module and we use IIS on Windows
 unless platform? "windows"
   include_recipe "php::module_mysql"
-  include_recipe "apache2"
-  include_recipe "apache2::mod_php5"
 end
 
 include_recipe "wordpress::database"
@@ -94,29 +90,30 @@ template "#{node['wordpress']['dir']}/wp-config.php" do
   action :create
 end
 
-if platform?('windows')
-
-  include_recipe 'iis::remove_default_site'
-
-  iis_pool 'WordpressPool' do
-    no_managed_code true
-    action :add
-  end
-
-  iis_site 'Wordpress' do
-    protocol :http
-    port 80
-    path node['wordpress']['dir']
-    application_pool 'WordpressPool'
-    action [:add,:start]
-  end
-else
-  web_app "wordpress" do
-    template "wordpress.conf.erb"
-    docroot node['wordpress']['dir']
-    server_name node['wordpress']['server_name']
-    server_aliases node['wordpress']['server_aliases']
-    server_port node['apache']['listen_ports']
-    enable true
-  end
-end
+# XXX Commentred because manage by bloggng::nginx
+#if platform?('windows')
+#
+#  include_recipe 'iis::remove_default_site'
+#
+#  iis_pool 'WordpressPool' do
+#    no_managed_code true
+#    action :add
+#  end
+#
+#  iis_site 'Wordpress' do
+#    protocol :http
+#    port 80
+#    path node['wordpress']['dir']
+#    application_pool 'WordpressPool'
+#    action [:add,:start]
+#  end
+#else
+#  web_app "wordpress" do
+#    template "wordpress.conf.erb"
+#    docroot node['wordpress']['dir']
+#    server_name node['wordpress']['server_name']
+#    server_aliases node['wordpress']['server_aliases']
+#    server_port node['apache']['listen_ports']
+#    enable true
+#  end
+#end

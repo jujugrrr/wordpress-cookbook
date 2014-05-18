@@ -20,7 +20,8 @@
 # limitations under the License.
 #
 
-include_recipe "mysql::client" unless platform_family?('windows') # No MySQL client on Windows
+# XXX managed by blogging::mysql
+#include_recipe "mysql::client" unless platform_family?('windows') # No MySQL client on Windows
 include_recipe "mysql-chef_gem" # Replaces mysql::ruby
 
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
@@ -32,7 +33,7 @@ node.save unless Chef::Config[:solo]
 db = node['wordpress']['db']
 
 if is_local_host? db['host']
-  include_recipe "mysql::server"
+#  include_recipe "mysql::server"
 
   mysql_connection_info = {
     :host     => 'localhost',
