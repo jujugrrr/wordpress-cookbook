@@ -38,7 +38,7 @@ if is_local_host? db['host']
   mysql_connection_info = {
     :host     => 'localhost',
     :username => 'root',
-    :password => node['mysql']['server_root_password']
+    :password => node['rackspace_mysql']['server_root_password']
   }
 
   mysql_database db['name'] do
